@@ -48,31 +48,42 @@ const actions = {
   },
 
   // get user info
-  getInfo({commit, state}) {
-    return new Promise((resolve, reject) => {
-      getInfo(getToken()).then(response => {
-        const {data} = response
+  async getInfo({commit, state}) {
+    // return new Promise((resolve, reject) => {
+    //   getInfo(getToken()).then(response => {
+    //     const {data} = response
+    //
+    //     if (!data) {
+    //       reject('Verification failed, please Login again.')
+    //     }
+    //
+    //     const {roles, name, avatar, introduction} = data
+    //
+    //     // roles must be a non-empty array
+    //     if (!roles || roles.length <= 0) {
+    //       reject('getInfo: roles must be a non-null array!')
+    //     }
+    //
+    //     commit('SET_ROLES', roles)
+    //     commit('SET_NAME', name)
+    //     commit('SET_AVATAR', avatar)
+    //     commit('SET_INTRODUCTION', introduction)
+    //     resolve(data)
+    //   }).catch(error => {
+    //     reject(error)
+    //   })
+    // })
 
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
-
-        const {roles, name, avatar, introduction} = data
-
-        // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
-
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
+    const {data} = await getInfo(getToken())
+    const {roles, name, avatar, introduction} = data
+    if (!roles || roles.length <= 0) {
+      throw '用户的角色不能为空！'
+    }
+    commit('SET_ROLES', roles)
+    commit('SET_NAME', name)
+    commit('SET_AVATAR', avatar)
+    commit('SET_INTRODUCTION', introduction)
+    return roles
   },
 
   // user logout
