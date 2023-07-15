@@ -16,7 +16,7 @@ service.interceptors.request.use(
     // do something before request is sent
     const token = getToken()
     if (token) {
-      config.headers['X-Token'] = token
+      config.headers['Authorization'] = token
     }
     return config
   },
